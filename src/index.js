@@ -125,8 +125,16 @@ topMenuEl.addEventListener("click", handlingTopMenu);
 
 const handlingSubMenu = (evt) => {
   evt.preventDefault();
+  if (evt.target.tagName === "A") {
+    let clickedSubBtn = evt.target.textContent;
+    console.log(clickedSubBtn);
+    subMenuEl.style.top = "0";
+    removeActiveClass;
+    mainHeader.textContent = clickedSubBtn;
+  }
   //return if not <a>
 
   // submenu should be hidden
   // h1 element in top menu must be updated
 };
+subMenuEl.addEventListener("click", handlingSubMenu);
