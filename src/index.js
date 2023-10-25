@@ -29,6 +29,8 @@ const menuLinks = [
     ],
   },
 ];
+
+let menuLinksObj;
 // PART 1.1
 let mainEl = document.querySelector("main");
 mainEl.style.backgroundColor = "#4a4e4d";
@@ -58,28 +60,12 @@ for (let i = 0; i < menuLinks.length; i++) {
   anchorLinks.setAttribute("href", menuLinks[i].href);
   anchorLinks.textContent = menuLinks[i].text;
   topMenuEl.appendChild(anchorLinks);
-
-  // Create sub-menu section using array
-
-  // if (menuLinks[i].hasOwnProperty("sublinks")) {
-  //   let sublinksLength = menuLinks[i].sublinks.length;
-  //   for (let x = 0; x < sublinksLength; x++) {
-  //     let anchorSubLinks = document.createElement("a");
-  //     anchorSubLinks.setAttribute("href", menuLinks[i].sublinks[x].href);
-  //     anchorSubLinks.textContent = menuLinks[i].sublinks[x].text;
-  //     subMenuEl.appendChild(anchorSubLinks);
-  //   }
-  // }
 }
 
-//Create a for loop
-//test:
-// console.log(menuLinks[1].sublinks[1].text);
-
-// 2.4 - Deactivate the nav buttons
-let topMenuLinks = topMenuEl.querySelectorAll("a");
+// 2.4 - Deactivate other nav buttons when new buttons is clicked
 
 const removeActiveClass = () => {
+  let topMenuLinks = topMenuEl.querySelectorAll("a");
   topMenuLinks.forEach((link) => {
     if (link.classList.contains("active")) {
       link.classList.remove("active");
@@ -87,7 +73,23 @@ const removeActiveClass = () => {
   });
 };
 
+// helper function Dynamic sub menu
+const buildSubmenu = (sublinkArray) => {
+  let submenuLinks = subMenuEl.querySelectorAll("a");
+  submenuLinks.forEach((link) => {
+    link.textContent = "";
+  });
+
+  for (let x = 0; x < sublinkArray.length; x++) {
+    let anchorSubLinks = document.createElement("a");
+    anchorSubLinks.setAttribute("href", sublinkArray[x].href);
+    anchorSubLinks.textContent = sublinkArray[x].text;
+    subMenuEl.appendChild(anchorSubLinks);
+  }
+};
+
 // Event listener: Toggle "active" class
+let secondClickTracker = null;
 const handlingTopMenu = (event) => {
   event.preventDefault();
   removeActiveClass();
@@ -96,42 +98,35 @@ const handlingTopMenu = (event) => {
   if (event.target.tagName === "A") {
     // Find the array equal to the clicked nav button
     let clickedNavBtn = event.target.textContent;
-    console.log(clickedNavBtn);
-    const menuLinksObj = menuLinks.find(
+    console.log(clickedNavBtn); //Requirement
+    menuLinksObj = menuLinks.find(
       (subMenuLinks) => subMenuLinks.text === clickedNavBtn
     );
+
     // btnHasSubMenu will return 'undefined' if sublinks does not exist
     let btnHasSubMenu = menuLinksObj.hasOwnProperty("sublinks");
     let btnIsActive = event.target.classList.contains("active");
+    let secondClick = secondClickTracker == clickedNavBtn;
 
-    if (btnHasSubMenu && btnIsActive) {
+    // sub-menu will be hidden if same button is clicked twice
+    if (btnHasSubMenu && btnIsActive && !secondClick) {
       subMenuEl.style.top = "100%";
+      // Evoke helper function
+      buildSubmenu(menuLinksObj.sublinks);
+      // Tracker for the second click
+      secondClickTracker = clickedNavBtn;
     } else {
       subMenuEl.style.top = "0";
+      secondClickTracker = null;
     }
   }
 };
 topMenuEl.addEventListener("click", handlingTopMenu);
 
-// if sublinks exist in the array &&
-// the className is "active", show the sub-menu
-// Study the following logic:
-// const handlingTopMenu = (event) => {
-//   event.preventDefault();
-//   if (event.target.tagName === "A") {
-//     const clickedLink = menuLinks.find(
-//       (link) => link.text === event.target.textContent
-//     );
-//     if (!event.target.classList.contains("active")) {
-//       if (clickedLink && clickedLink.sublinks) {
-//         subMenuEl.style.top = "100%";
-//       } else {
-//         subMenuEl.style.top = "0";
-//       }
-//     }
-//     removeActiveClass();
-//     event.target.classList.toggle("active");
-//   }
-// };
+const handlingSubMenu = (evt) => {
+  evt.preventDefault();
+  //return if not <a>
 
-// topMenuEl.addEventListener("click", handlingTopMenu);
+  // submenu should be hidden
+  // h1 element in top menu must be updated
+};
