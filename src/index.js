@@ -96,7 +96,7 @@ const buildSubmenu = (sublinkArray) => {
     anchorSubLinks.textContent = sublinkArray[x].text;
     subMenuEl.appendChild(anchorSubLinks);
   }
-};
+``};
 
 //=====================================================================//
 // Event Handler: handlingTopMenu
@@ -134,6 +134,9 @@ const handlingTopMenu = (event) => {
       subMenuEl.style.top = "0";
       secondClickTracker = null;
     }
+    if (clickedNavBtn === "about") {
+      mainHeader.textContent = clickedNavBtn.toUpperCase();
+    }
   }
 };
 //=====================================================================//
@@ -151,6 +154,7 @@ const handlingSubMenu = (evt) => {
     console.log(clickedSubBtn);
     subMenuEl.style.top = "0";
     removeActiveClass;
+    secondClickTracker = null;
     mainHeader.textContent = clickedSubBtn.toUpperCase();
   }
 };
