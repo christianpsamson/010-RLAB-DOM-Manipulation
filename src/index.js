@@ -32,10 +32,6 @@ const menuLinks = [
 ];
 
 //=====================================================================//
-// Global Variable
-//=====================================================================/
-
-//=====================================================================//
 // Main Element Manipulation
 //=====================================================================//
 let mainEl = document.querySelector("main");
@@ -155,7 +151,7 @@ const handlingSubMenu = (evt) => {
     console.log(clickedSubBtn);
     subMenuEl.style.top = "0";
     removeActiveClass;
-    mainHeader.textContent = clickedSubBtn;
+    mainHeader.textContent = clickedSubBtn.toUpperCase();
   }
 };
 
